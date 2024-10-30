@@ -1,0 +1,31 @@
+name: http_get
+description: A new Flutter project.
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.1.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: ^6.1.2
+  http: ^1.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0 # Nama package di sini adalah "flutter_lints", bukan "flutter_lintas"
+
+flutter:
+  uses-material-design: true
+
+fonts:
+  - family: Lato
+    fonts:
+      - asset: assets/fonts/Lato-Regular.ttf # Perbaikan "Reguler" menjadi "Regular"
+      - asset: assets/fonts/Lato-Bold.ttf # Perbaikan dari "LAto-Bold" ke "Lato-Bold"
+        weight: 700 "
+  - family: Anton
+    fonts:
+      - asset: assets/fonts/Anton-Regular.ttf
