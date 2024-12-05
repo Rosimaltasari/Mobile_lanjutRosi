@@ -1,7 +1,7 @@
 <?php
 //config.php
 $host  = '127.0.0.1';
-$db    = 'pustaka';
+$db    = 'perpustakaan';
 $user  = 'root';
 $pass  = '';
 

@@ -17,32 +17,32 @@ switch ($method) {
     case 'GET' :
         if ($id) {
             //GET Student by ID
-            $stmt = $pdo->prepare(query: "SELECT * FROM buku WHERE id = ?");
+            $stmt = $pdo->prepare(query: "SELECT * FROM peminjaman WHERE id = ?");
             $stmt->execute(params: [$id]);
-            $buku = $stmt->fetch(mode: PDO::FETCH_ASSOC);
+            $peminjaman = $stmt->fetch(mode: PDO::FETCH_ASSOC);
 
-            if ($bukus) {
-                echo json_encode(value: $buku);
+            if ($peminjamans) {
+                echo json_encode(value: $peminjaman);
             }else {
                 http_response_code(response_code: 404);
-                echo json_encode(value: ["mesage" => "Buku not found"]);
+                echo json_encode(value: ["mesage" => "Peminjaman not found"]);
             }
         } else {
-            //GE All Students
-            $stmt = $pdo->query("SELECT *FROM buku");
-            $bukus = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            echo json_encode(value: $bukus);
+            //GE All peminjamn
+            $stmt = $pdo->query("SELECT *FROM peminjaman");
+            $peminjamans = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            echo json_encode(value: $peminjamans);
         }
         break;
 
         case 'POST';
-        //create new buku
+        //create new peminjaman
         $data = json_decode(json: file_get_contents(filename: "php://input"), associative: true);
 
-        if (!empty($data['judul_buku']) && !empty($data['pengarang']) && !empty($data['penerbit']) && !empty($data['tahun_terbit'])) {
-            $stmt = $pdo->prepare(query: "INSERT INTO buku (judul_buku, pengarang, penerbit, tahun_terbit) VALUES (?, ?, ?, ?)");
-            $stmt->execute(params: [$data['judul_buku'], $data['pengarang'],  $data['penerbit'], $data['tahun_terbit']]);
-            echo json_encode(value: ["message" => "Buku created", "id" => $pdo->lastInsertId()]);
+        if (!empty($data['tanggal_pinjam']) && !empty($data['tanggal_kembali']) ) {
+            $stmt = $pdo->prepare(query: "INSERT INTO peminjaman (tanggal_pinjam, tanggal_kembali, alamat, jenis_kelamin) VALUES (?, ?, ?, ?)");
+            $stmt->execute(params: [$data['tanggal_pinjam'], $data['tanggal_kembali']]);
+            echo json_encode(value: ["message" => "Peminjaman created", "id" => $pdo->lastInsertId()]);
         } else {
             http_response_code(response_code: 400);
             echo json_encode(value: ["message" => "Invalid data"]);
@@ -50,26 +50,24 @@ switch ($method) {
         break;
 
         case 'PUT':
-            //update buku by ID
+            //update peminjaman by ID
             if ($id) {
                 $data = json_decode(json:file_get_contents(filename: "php://input"), assocative: true);
 
-                $stmt = $pdo->prepare(query: "SELECT * FROM buku WHERE id = ?");
+                $stmt = $pdo->prepare(query: "SELECT * FROM peminjaman WHERE id = ?");
                 $stmt->execute(params: [$id]);
-                $buku = $stmt->fetch(mode: PDO::FETCH_ASSOC);
+                $peminjaman = $stmt->fetch(mode: PDO::FETCH_ASSOC);
 
-                if ($buku) {
-                    $judul_buku = $data['judul_buku'] ?? $buku['judul_buku'];
-                    $pengarang = $data['pengarang'] ?? $buku['pengarang'];
-                    $penerbit = $data['penerbit'] ?? $buku['penerbit'];
-                    $tahun_terbit = $data['tahun_terbit'] ?? $buku['tahun_terbit'];
+                if ($peminjaman) {
+                    $tanggal_pinjam = $data['tanggal_pinjam'] ?? $peminjaman['tanggal_pinjam'];
+                    $tanggal_kembali = $data['tanggal_kembali'] ?? $peminjaman['tanggal_kembali'];
 
-                    $stmt = $pdo->prepare(query: "UPDATE bukus SET judul_buku = ?, pengarang = ?, penerbit = ?, tahun_terbit = ? WHERE id = ?");
-                    $stmt->execute(params: [$judul_buku, $pengarang, $penerbit, $tahun_terbit, $id]);
-                    echo json_encode(value: ["message" => "Buku updated"]);
+                    $stmt = $pdo->prepare(query: "UPDATE peminjamans SET tanggal_pinjam = ?, tanggal_kembali = ? WHERE id = ?");
+                    $stmt->execute(params: [$tanggal_pinjam, $tanggal_kembali, $id]);
+                    echo json_encode(value: ["message" => "Peminjaman updated"]);
                 } else {
                     http_response_code(response_code: 404);
-                    echo json_encode(value: ["message" => "Buku not found"]);
+                    echo json_encode(value: ["message" => "Peminjaman not found"]);
                 }
             } else {
                 http_response_code(response_code: 400);
@@ -78,19 +76,19 @@ switch ($method) {
             break;
 
             case 'DELETE':
-                //dELETE BUKU BY ID
+                //dELETE PEMINJAMAN BY ID
                 if ($id) {
-                    $stmt = $pdo->prepare(query: "SELECT *FROM buku WHERE id = ?");
+                    $stmt = $pdo->prepare(query: "SELECT *FROM peminjaman WHERE id = ?");
                     $stmt->execute(params: [$id]);
-                    $buku  = $stmt->fetch(mode: PDO::FETCH_ASSOC);
+                    $peminjaman  = $stmt->fetch(mode: PDO::FETCH_ASSOC);
 
-                    if ($buku) {
-                        $stmt = $pdo->prepare(query: "DELETE FROM bukus WHERE id = ?");
+                    if ($peminjaman) {
+                        $stmt = $pdo->prepare(query: "DELETE FROM peminjamans WHERE id = ?");
                         $stmt->execute(params: [$id]);
-                        echo json_encode(value: ["message" => " Buku  deleted"]);
+                        echo json_encode(value: ["message" => " Peminjaman  deleted"]);
                     } else {
                         http_response_code(response_code: 404);
-                        echo json_encode(value: ["message" => "Buku not found"]);
+                        echo json_encode(value: ["message" => "Peminjaman not found"]);
                     }
                         
                 } else {
